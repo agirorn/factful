@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+sudo docker-compose exec db psql -U user1 ddd

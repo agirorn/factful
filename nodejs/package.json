@@ -1,0 +1,49 @@
+{
+  "name": "factful",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "author": "Ægir Örn Símonarson <agirorn@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "ci": "npm-run-all coverage lint",
+    "dev": "yardman node_modules .eslintrc.js package.json scripts tests tests-uvu lib 'yarn dev:exec'",
+    "dev:exec": "clear && yarn test",
+    "dev:exec:old": "clear && yarn test -- --bail && npm-run-all clear lint clear ci",
+    "clear": "clear",
+    "lint": "eslint lib tests scripts",
+    "coverage": "magic-carpet",
+    "test": "sanna tests",
+    "test:ci": "sanna tests"
+  },
+  "dependencies": {
+    "chai-as-promised": "^7.1.1",
+    "date-fns": "^2.17.0",
+    "debug": "^4.3.1",
+    "npm-run-all": "^4.1.5",
+    "p-finally": "^2.0.1",
+    "p-series": "^2.1.0",
+    "p-tap": "^3.1.0",
+    "pg": "^8.5.1",
+    "pg-listen": "^1.7.0",
+    "pg-query-stream": "^4.0.0",
+    "ramda": "^0.27.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "c8": "^7.6.0",
+    "chai-subset": "^1.6.0",
+    "chai-uuid": "^1.0.6",
+    "delay": "^5.0.0",
+    "dirty-chai": "^2.0.1",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "invert-promise": "^2.0.0",
+    "magic-carpet": "^0.0.2",
+    "p-event": "^4.2.0",
+    "sanna": "^0.0.2",
+    "sinon-chai": "^3.5.0",
+    "stream-array": "^1.1.2",
+    "yardman": "^0.0.9"
+  }
+}

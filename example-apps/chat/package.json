@@ -1,0 +1,51 @@
+{
+  "name": "straumar-chat-example",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "emittery": "^0.7.1",
+    "eslint": "^6.6.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.5",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^3.4.3",
+    "factful": "../../nodejs",
+    "styled-components": "^5.2.0",
+    "ws": "^7.3.1",
+    "yardman": "^0.0.9"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "magic-carpet": "^0.0.2"
+  },
+  "scripts": {
+    "start": "yardman package.json server -x 'clear && yarn start:server' -w /dev/null -x 'yarn start:client'",
+    "dev": "magic-carpet",
+    "dev2": "yardman -w /dev/null -x 'yarn start:client' -w package.json -w server -x 'clear && yarn start:server' -w package.json -w server -w src -x 'clear && yarn lint'",
+    "start:client": "react-scripts start",
+    "start:server": "node server/index.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "lint": "eslint --ext .jsx --ext .js server src",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

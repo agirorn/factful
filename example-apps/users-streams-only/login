@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+curl -d '{"username":"admin", "password":"admin"}' -H "Content-Type: application/json" -X POST http://localhost:8080/login

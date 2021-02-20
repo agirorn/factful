@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# PGPASSWORD=docker psql -h db --user postgres
+
+# docker-compose run -it -e PGPASSWORD=docker db psql --help
+# docker-compose run -e PGPASSWORD=docker db psql -h db --user postgres factful
+docker-compose run -e PGPASSWORD=docker db psql -h db --user postgres factful
