@@ -8,8 +8,8 @@ const {
 
 const poolFactory = () => new Pool({
   host: 'localhost',
-  user: 'postgres',
-  password: 'docker',
+  user: 'factful_user',
+  password: 'factful_password',
   database: 'factful',
   max: 20,
   idleTimeoutMillis: 30000,

@@ -1,0 +1,16 @@
+matrix:
+  include:
+    - language: node.js
+      cache: yarn
+      node_js:
+        - "15"
+        - "14"
+      services:
+        - postgresql
+      before_script:
+        - psql -c 'create database factful;' -U postgres
+        - psql -c "CREATE USER factful_user WITH PASSWORD 'factful_password';" -U postgres
+        - cd nodejs
+      script:
+        - yarn install
+        - yarn ci
