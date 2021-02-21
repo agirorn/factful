@@ -2,18 +2,23 @@ matrix:
   include:
     - language: node.js
       cache: yarn
-      node_js:
-        - "15"
-        - "14"
+      node_js: 14
       services:
         - postgresql
       before_script:
-        - psql -c 'create database factful;' -U postgres
-        - psql -c "CREATE USER factful_user WITH PASSWORD 'factful_password';" -U postgres
-        # SUPERUSER role is required to allow the user to install extensions
-        # Factful uses the uuid-ossp extension
-        - psql -c "ALTER USER factful_user WITH SUPERUSER;" -U postgres
         - cd nodejs
+        - ./scripts/travis-ci.before_script
+      script:
+        - yarn install
+        - yarn ci
+    - language: node.js
+      cache: yarn
+      node_js: 15
+      services:
+        - postgresql
+      before_script:
+        - cd nodejs
+        - ./scripts/travis-ci.before_script
       script:
         - yarn install
         - yarn ci
