@@ -1,20 +1,12 @@
+[![npm version][npm-badge]][npm-link]
+[![Build Status][travis-badge]][travis-link]
 # Factful
 
-> Seamless event sourcing and streaming for PostgresSQL
+> Seamless event sourcing and streaming for PostgreSQL
 
-Provides 2 streams PostgreSQLStream and the MemoryStream.
-
-- PostgreSQLStream persisted events to a PostgreSQL and can interact between
-  connections and servers.
-- MemoryStream stores the stream in memory and all events in the stream will be
-  lost when the application stops. The MemoryStream is mostly useful for
-  in tests for code that will use PostgreSQLStream in production since they have
-  a compatible API but the MemoryStream is faster and simper to setup.
-
-[API Documentation](docs/API.md)
-
-
-https://node-postgres.com/api/pool
+- Factful requires a [PostgreSQL pool] to communicate with the server.
+- [API Documentation]
+- [Example applications]
 
 ## Installation
 
@@ -26,30 +18,30 @@ npm install factful
 
 ```js
   const Factful = require('factful');
-  const { Pool } = require('pg')
+  const { Pool } = require('pg');
+  const poolOptions = require('./pool-options');
 
   const history = new Factful({
     name: 'events',
-    autoCreate: true,
-    failIfExist: false,
-    concurrencyProtection: true,
-    versioned: true,
-    pool: new Pool(),
+    pool: new Pool(poolOptions),
   });
+  await history.create();
 
   const aggregateId: '76144577-6425-42da-90a7-155d8e7745e7';
   const liveStream = history.getLiveStream({ aggregateId });
-  const liveEvents = [];
-  liveStream.on('data', (event) => liveEvents.push(event));
+  process.nextTick(() => {
+    for await (const event of liveStream) {
+      liveEvents.push(event);
+    }
+  });
 
-  await instance.save({ aggregateId, version: 1 });
-
-  const events = history.getEventsStream({ aggregateId });
-  const allEvents = [];
-  events.on('data', (event) => allEvents.push(event));
+  await instance.save({ aggregateId, data: { key: 'value' }});
+  for await (const event of history.getEventsStream({ aggregateId })) {
+    events.push(event);
+  }
 
   process.nextTick(() => {
-    deepEquals(liveEvents, allEvents);
+    deepEquals(liveEvents, events);
   });
 ```
 
@@ -65,7 +57,6 @@ const Factful = require('factful');
 const instace = Factful.memory({
   name: 'events',
   autoCreate: true,
-  failIfExist: false,
 });
 const aggregateId: '76144577-6425-42da-90a7-155d8e7745e7';
 async function run() {
@@ -83,136 +74,30 @@ async function run() {
 run().catch(console.error);
 ```
 
-## On deployment of app
+## Deployment
 
-**migratory.js**
-
-```js
-const Factful = require('factful');
-const history = await Factful.pg({
-  name: 'events',
-  autoCreate: true,
-  failIfExist: false,
-  connectionPool
-});
-await history.create();
-```
-
-### multiple streams
-
-Streams are joined on the timestamp
+When deploying an application that uses Factful you have to create the streams
+before using them. It can be done in the main app as long as the user of the
+used to connect the pool to the PostgreSQL database has the required privileges
+to do that. Often that is not the preferred way to manage the tables and
+a migration script is created like this.
 
 ```js
-  const Factful = requier('factful')
-  const history = await Factful.pg({
-     stream: 'events',
-     autoCreate: true,
-     failIfExist: false,
-     connection,
-  })
-
-  await history.create({ failIfExist: false })
-  const events = history.getStream({
-    aggregates: [
-      'user',
-      'user_config',
-    ],
-    offset: offset,
-  )
-  for await (const event of events) {
-    print event.name;
-  }
-
-  // This will destroy the stream and all it's data
-  // Please do not allow the user to destroy any tables in the database :)
-  await history.destroy()
+  const Factful = require('factful');
+  const { Pool } = require('pg');
+  const poolOptions = require('./pool-options');
+  const history = (new Factful.pg({
+    name: 'events',
+    pool: new Pool(poolOptions),
+  }))
+  await history.create();
 ```
 
-```js
-  const Factful = requier('factful')
-  const history = await Factful.pg({
-     stream: 'events',
-     dbconfig
-  })
+[PostgreSQL pool]: https://node-postgres.com/api/pool
+[API Documentation]: ./docs/API.md
+[Example applications]: https://github.com/agirorn/factful/tree/master/example-apps
 
-  await history.save(event)
-  await history.save(event, event)
-  await history.save([event, event])
-
-  const events = history.getStream({
-    aggregates: [
-      'user',
-      'user_config',
-    ],
-    offset: offset,
-  )
-  for await (const event of events) {
-    print event.name;
-  }
-```
-
-
-__Get aggregate for a single aggregate__
-```js
-  const Factful = requier('factful')
-  const history = await Factful.pg({
-     stream: 'events',
-     dbconfig
-  })
-  await history.connect()
-
-  // going to change a single aggregate
-  const id = 'the id'
-  const events = history.getStream({
-    aggregate: 'user',
-    aggregateId: id,
-  )
-  state = {};
-  for await (const event of events) {
-    update(state, event);
-  }
-  validate(command);
-  events = [
-    event 1,
-    event 2,
-  ]
-  stream.save(...events)
-```
-
-__command__
-```js
-  const { PostgreSQL: Factful } = requier('factful')
-  const COMMAND = (history) => async  (id, ...args) {
-    await (await Aggregate.replayFrom(history, id)).canPerformCommand()
-    await history.save([
-      new Event1(...args),
-      new Event2(...args)
-    ]);
-  }
-  const history = new Factful({
-     stream: 'events',
-     ...dbconfig
-  })
-  await history.connect()
-  command = COMMAND(history);
-
-  await command(...args):
-  // going to change a single aggregate
-  const id = 'the id'
-  const events = history.getStream({
-    aggregates: [
-      'user',
-    ],
-    aggregateId: id,
-  )
-  state = {};
-  for await (const event of events) {
-    update(state, event);
-  }
-  validate(command);
-  events = [
-    event 1,
-    event 2,
-  ]
-  stream.save(...events)
-```
+[npm-badge]: https://badge.fury.io/js/factful.svg
+[npm-link]: https://badge.fury.io/js/factful
+[travis-badge]: https://travis-ci.org/agirorn/factful.svg?branch=master
+[travis-link]: https://travis-ci.org/agirorn/factful

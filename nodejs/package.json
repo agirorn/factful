@@ -2,8 +2,15 @@
   "name": "factful",
   "version": "0.0.0",
   "main": "lib/index.js",
-  "author": "Ægir Örn Símonarson <agirorn@gmail.com>",
+  "description": "Seamless event sourcing and streaming for PostgreSQL",
   "license": "MIT",
+  "bugs": "https://github.com/agirorn/factful/issues",
+  "repository": "git://github.com/agirorn/factful.git",
+  "homepage": "https://github.com/agirorn/factful#readme",
+  "author": "Ægir Örn Símonarson <agirorn@gmail.com>",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "ci": "npm-run-all coverage lint",
     "dev": "yardman node_modules .eslintrc.js package.json scripts tests tests-uvu lib 'yarn dev:exec'",
@@ -45,5 +52,14 @@
     "sinon-chai": "^3.5.0",
     "stream-array": "^1.1.2",
     "yardman": "^0.0.9"
-  }
+  },
+  "keywords": [
+    "PostgreSQL",
+    "event sourcing",
+    "event store",
+    "factful",
+    "messaging",
+    "stream",
+    "streaming"
+  ]
 }
