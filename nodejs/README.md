@@ -94,7 +94,7 @@ a migration script is created like this.
 ```
 
 [PostgreSQL pool]: https://node-postgres.com/api/pool
-[API Documentation]: ./docs/API.md
+[API Documentation]: ./docs/api.md
 [Example applications]: https://github.com/agirorn/factful/tree/master/example-apps
 
 [npm-badge]: https://badge.fury.io/js/factful.svg

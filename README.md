@@ -7,7 +7,7 @@
 
 # node.js
 
-Information on the node.js version can be found [here](./nodejs)
+Information on the node.js version can be found [here](./nodejs#readme)
 
 [npm-badge]: https://badge.fury.io/js/factful.svg
 [npm-link]: https://badge.fury.io/js/factful

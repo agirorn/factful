@@ -6,7 +6,7 @@
   "license": "MIT",
   "bugs": "https://github.com/agirorn/factful/issues",
   "repository": "git://github.com/agirorn/factful.git",
-  "homepage": "https://github.com/agirorn/factful#readme",
+  "homepage": "https://github.com/agirorn/factful/nodejs#readme",
   "author": "Ægir Örn Símonarson <agirorn@gmail.com>",
   "files": [
     "lib"
