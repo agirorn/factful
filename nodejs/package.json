@@ -1,6 +1,6 @@
 {
   "name": "factful",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "lib/index.js",
   "description": "Seamless event sourcing and streaming for PostgreSQL",
   "license": "MIT",
