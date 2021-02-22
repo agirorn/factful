@@ -1,7 +1,7 @@
 const { PassThrough, Transform } = require('stream');
 const debug = require('debug')('factful:pg');
-const { query } = require('./query');
 const delay = require('delay');
+const { query } = require('./query');
 const { tableName } = require('./db');
 const { listeningClient } = require('./tools/listening-client');
 
@@ -56,9 +56,7 @@ const getLiveStream = (pool, streamName, options = {}) => {
     .connect()
     .then(listenToEventFromStream)
     .catch((error) => {
-      console.log(error)
       pass.emit('error', new Error(error.stack));
-      // pass.error(new Error(error.stack));
     });
   return pass;
 };
