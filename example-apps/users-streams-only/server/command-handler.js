@@ -2,7 +2,7 @@ const setup = (streams) => async (req) => {
   const { body: command } = req;
   if (command.aggregate === 'USERS') {
     if (command.name === 'CREATE') {
-      await streams.saveEvents('users', [{
+      await streams.save([{
         aggregate: 'USERS',
         aggregateId: command.aggregateId,
         name: 'CREATED',
@@ -12,7 +12,7 @@ const setup = (streams) => async (req) => {
       }]);
     }
     if (command.name === 'UPDATE_NAME') {
-      await streams.saveEvents('users', [{
+      await streams.save([{
         aggregate: 'USERS',
         aggregateId: command.aggregateId,
         name: 'NAME_UPDATED',
@@ -23,7 +23,7 @@ const setup = (streams) => async (req) => {
     }
 
     if (command.name === 'ACTIVATE') {
-      await streams.saveEvents('users', [{
+      await streams.save([{
         aggregate: 'USERS',
         aggregateId: command.aggregateId,
         name: 'ACTIVATED',
@@ -32,7 +32,7 @@ const setup = (streams) => async (req) => {
     }
 
     if (command.name === 'DEACTIVATE') {
-      await streams.saveEvents('users', [{
+      await streams.save([{
         aggregate: 'USERS',
         aggregateId: command.aggregateId,
         name: 'DEACTIVATED',

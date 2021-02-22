@@ -1,7 +1,7 @@
 const http = require('http');
 const pEvent = require('p-event');
 const { Pool } = require('pg');
-const { PostgreSQLStreams } = require('factful');
+const Factful = require('factful');
 const credentials = require('./pg-credentials');
 const { setup: websocket } = require('./websocket');
 const { setup: express } = require('./express');
@@ -16,7 +16,10 @@ const start = (server) => {
 };
 
 const run = async () => {
-  const streams = new PostgreSQLStreams(new Pool(credentials));
+  const streams = new Factful({
+    name: 'users',
+    pool: new Pool(credentials),
+  });
   const server = http.createServer(express(streams));
   websocket(server, streams);
   start(server);
