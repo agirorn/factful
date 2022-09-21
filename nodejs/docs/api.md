@@ -37,7 +37,7 @@ Checks it the stream exists.
   }
 ```
 
-### async .save((event: Object, events: Array), postHook: async function)
+### async .save(events: Event | Event[]), postHook?: async function(client: Client))
 
 Save all the events in a single transaction. If a postHook is provide it also
 has to complete successfully before the transaction is committed.
@@ -51,6 +51,15 @@ events and the connection is in the same transaction that is being used to store
 the events and has to complete successfully for the events to be persisted. The
 inserted events will be rolled back if the postHook fails by rejecting the
 promise or throwing an error.  It can be used to do set validation.
+
+The postHook is an async function called after the events have been inserted
+into the stream but before they are committed. The function gets a connection to
+the database was used to store the events and the connection is in the same
+transaction that was used to store the events and allowing the user to do 
+[set validation] within the transaction.
+
+The save is rolled back if the the promise returned from the postHook is is
+rejected.
 
 __Parameters__
 
@@ -136,3 +145,5 @@ __properties__
   Only for streams configured to have the userId
 - __timestamp:__ Datetime: The timestamp of when the event got saved
 - __date:__ Object: A data object can contain anything
+
+[set validation]: ./set-validation
